@@ -1,0 +1,32 @@
+type Query {
+    petById(p_id: String): Pet
+}
+
+type Pet {
+    id: ID
+    pId: String
+    name: String
+    birthdate: Date
+    weight: String
+    breed:Breed
+    owner: Owner
+    trainingLevel: Int
+    vaccinationStatus: String
+}
+
+type Owner {
+    id: ID
+    pId:String
+    name: String
+    email: String
+    address: String
+    phone: String
+}
+
+enum Breed  {
+    GOLDEN,
+    CORGI,
+    FRENCH_BULLDOG
+}
+
+scalar Date
