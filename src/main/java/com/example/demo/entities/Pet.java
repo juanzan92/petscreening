@@ -43,17 +43,17 @@ public class Pet {
     private String name;
 
     @Column(name = "weight")
-    private String weight;
+    private Float weight;
 
     @Column(name = "training_level")
-    private String trainingLevel;
+    private int trainingLevel;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "breed")
     private Breed breed;
 
     @Column(name = "vaccination_status")
-    private String vaccinationStatus;
+    private Boolean vaccinationStatus;
 
     @ManyToOne(targetEntity = Owner.class)
     @JoinColumn(name = "pet_owner", nullable = false, referencedColumnName = "p_id")

@@ -1,5 +1,13 @@
 type Query {
     petById(p_id: String): Pet
+    findPetsUnderWeight(weight: Float!): [Pet]
+    findVaccinatedPets(status: Boolean!): [Pet]
+    findNonPoodlePets: [Pet]
+    findPetsWithTrainingLevel(minTrainingLevel: Int!): [Pet]
+}
+
+type Mutation {
+    addPet(name: String!, weight: Float!, vaccinated: Boolean!, breed: String!, trainingLevel: Int!, ownerId: String!): Pet
 }
 
 type Pet {
@@ -7,7 +15,7 @@ type Pet {
     pId: String
     name: String
     birthdate: Date
-    weight: String
+    weight: Float
     breed:Breed
     owner: Owner
     trainingLevel: Int
@@ -24,9 +32,10 @@ type Owner {
 }
 
 enum Breed  {
-    GOLDEN,
+    GOLDEN_RETRIEVER,
     CORGI,
-    FRENCH_BULLDOG
+    FRENCH_BULLDOG,
+    POODLE
 }
 
 scalar Date
