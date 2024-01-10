@@ -10,7 +10,7 @@ import com.example.demo.repository.PetRepository;
 import com.example.demo.specification.PetSpecification;
 import com.example.demo.validator.EligibilityValidation;
 import com.github.ksuid.Ksuid;
-import graphql.kickstart.tools.GraphQLQueryResolver;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+@Slf4j
 @Component
-public class PetResolver implements GraphQLQueryResolver {
+public class PetResolver {
 
     public static final String PET_PREFIX = "pet-";
     private final PetRepository petRepository;
@@ -68,6 +68,8 @@ public class PetResolver implements GraphQLQueryResolver {
     }
 
     public Pet createPet(String name, Float weight, Boolean vaccinated, String breed, int trainingLevel, String ownerId) {
+        log.info("PetResolver#addPet - name={} weight={} vaccinated={} breed={} trainingLevel={} ownerId={}"
+                , name, weight, vaccinated, breed, trainingLevel, ownerId);
         var owner = ownerRepository.findByPId(ownerId)
                 .orElseThrow(() -> NotFoundException.getException("pet", ownerId));
 

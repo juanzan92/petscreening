@@ -10,7 +10,7 @@ public class TrainingLevelValidator implements EligibilityValidation {
 
     @Override
     public void validate(Pet input) {
-        if ( input.getTrainingLevel() <= FLOOR_LEVEL) {
+        if (input.getTrainingLevel() <= FLOOR_LEVEL) {
             ValidationException.getException("Training Level too low");
         }
     }

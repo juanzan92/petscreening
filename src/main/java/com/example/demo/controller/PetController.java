@@ -49,7 +49,6 @@ public class PetController {
                        @Argument String ownerId) {
 
         return petResolver.createPet(name, weight, vaccinated, breed, trainingLevel, ownerId);
-
     }
 
     @SchemaMapping

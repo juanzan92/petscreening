@@ -1,6 +1,5 @@
 package com.example.demo.config;
 
-import graphql.scalars.id.UUIDScalar;
 import graphql.schema.GraphQLScalarType;
 
 public class Scalars {
