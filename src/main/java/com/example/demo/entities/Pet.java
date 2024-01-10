@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
@@ -33,6 +34,7 @@ public class Pet {
     @Column(name = "p_id")
     private String pId;
 
+    @CreationTimestamp
     @Column(name = "created_at")
     private Date createdAt;
 

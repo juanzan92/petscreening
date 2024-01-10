@@ -27,7 +27,7 @@ public class PetMutationResolver implements GraphQLMutationResolver {
                 , name, weight, vaccinated, breed, trainingLevel, ownerId);
 
         Owner owner = ownerRepository.findByPId(ownerId)
-                .orElseThrow(() -> NotFoundException.getException(ownerId));
+                .orElseThrow(() -> NotFoundException.getException("owner", ownerId));
 
         Pet newPet = Pet.builder()
                 .name(name)

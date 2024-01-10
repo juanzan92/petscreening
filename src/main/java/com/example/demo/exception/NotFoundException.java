@@ -5,9 +5,9 @@ public class NotFoundException extends RuntimeException {
         super(message);
     }
 
-    public static final String PREFIX = "Object not found for key %s ";
+    public static final String PREFIX = "%s not found for key %s ";
 
-    public static NotFoundException getException(String id) {
-        return new NotFoundException(String.format(PREFIX, id));
+    public static NotFoundException getException(String searchedObject, String id) {
+        return new NotFoundException(String.format(PREFIX, searchedObject, id));
     }
 }

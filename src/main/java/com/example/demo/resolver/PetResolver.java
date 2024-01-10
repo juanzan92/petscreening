@@ -3,14 +3,19 @@ package com.example.demo.resolver;
 import com.example.demo.entities.Pet;
 import com.example.demo.entities.PetEligibility;
 import com.example.demo.entities.PetSearchCriteria;
+import com.example.demo.entities.enums.Breed;
 import com.example.demo.exception.NotFoundException;
+import com.example.demo.repository.OwnerRepository;
 import com.example.demo.repository.PetRepository;
 import com.example.demo.specification.PetSpecification;
 import com.example.demo.validator.EligibilityValidation;
+import com.github.ksuid.Ksuid;
 import graphql.kickstart.tools.GraphQLQueryResolver;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,11 +24,14 @@ import java.util.Map;
 @Component
 public class PetResolver implements GraphQLQueryResolver {
 
+    public static final String PET_PREFIX = "pet-";
     private final PetRepository petRepository;
+    private final OwnerRepository ownerRepository;
     private final List<EligibilityValidation> eligibilityValidations;
 
-    public PetResolver(PetRepository petRepository, List<EligibilityValidation> eligibilityValidations) {
+    public PetResolver(PetRepository petRepository, OwnerRepository ownerRepository, List<EligibilityValidation> eligibilityValidations) {
         this.petRepository = petRepository;
+        this.ownerRepository = ownerRepository;
         this.eligibilityValidations = eligibilityValidations;
     }
 
@@ -37,7 +45,7 @@ public class PetResolver implements GraphQLQueryResolver {
 
     public PetEligibility checkPetViability(String petId) {
         var pet = petRepository.findByPId(petId)
-                .orElseThrow(() -> NotFoundException.getException(petId));
+                .orElseThrow(() -> NotFoundException.getException("pet", petId));
 
         Map<String, Boolean> validationResultMap = new HashMap<>();
 
@@ -57,5 +65,29 @@ public class PetResolver implements GraphQLQueryResolver {
                 .isValidPet(validationResultMap.values().stream().allMatch(Boolean::booleanValue))
                 .petId(petId)
                 .build();
+    }
+
+    public Pet createPet(String name, Float weight, Boolean vaccinated, String breed, int trainingLevel, String ownerId) {
+        var owner = ownerRepository.findByPId(ownerId)
+                .orElseThrow(() -> NotFoundException.getException("pet", ownerId));
+
+        //how to validate not insert the same pet twice ?
+
+        var pet = Pet.builder()
+                .vaccinationStatus(vaccinated)
+                .birthdate(Date.from(Instant.now()))
+                .pId(getNewPId())
+                .name(name)
+                .weight(weight)
+                .breed(Breed.valueOf(breed))
+                .trainingLevel(trainingLevel)
+                .owner(owner)
+                .build();
+
+        return petRepository.save(pet);
+    }
+
+    private String getNewPId() {
+        return PET_PREFIX + Ksuid.newKsuid();
     }
 }

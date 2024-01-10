@@ -9,6 +9,7 @@ import com.example.demo.repository.PetRepository;
 import com.example.demo.resolver.PetResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
@@ -35,8 +36,20 @@ public class PetController {
     }
 
     @QueryMapping
-    public PetEligibility checkPetEligibility(@Argument String petId){
+    public PetEligibility checkPetEligibility(@Argument String petId) {
         return petResolver.checkPetViability(petId);
+    }
+
+    @MutationMapping
+    private Pet addPet(@Argument String name,
+                       @Argument Float weight,
+                       @Argument Boolean vaccinated,
+                       @Argument String breed,
+                       @Argument int trainingLevel,
+                       @Argument String ownerId) {
+
+        return petResolver.createPet(name, weight, vaccinated, breed, trainingLevel, ownerId);
+
     }
 
     @SchemaMapping
