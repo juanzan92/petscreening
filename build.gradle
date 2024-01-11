@@ -28,6 +28,7 @@ dependencies {
 	implementation 'com.graphql-java:graphql-java-extended-scalars:21.0'
 	implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:11.1.0'
 	implementation 'org.hibernate:hibernate-jpamodelgen:5.6.15.Final'
+	implementation 'javax.validation:validation-api:1.1.0.Final'
 	implementation 'com.zhokhov.graphql:graphql-datetime-spring-boot-starter:4.0.0'
 	compileOnly 'org.projectlombok:lombok'
 	compileOnly 'org.springframework.boot:spring-boot-starter-web'

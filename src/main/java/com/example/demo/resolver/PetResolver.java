@@ -2,29 +2,28 @@ package com.example.demo.resolver;
 
 import com.example.demo.entities.Pet;
 import com.example.demo.entities.PetEligibility;
-import com.example.demo.entities.PetSearchCriteria;
-import com.example.demo.entities.enums.Breed;
+import com.example.demo.entities.input.PetInput;
+import com.example.demo.entities.input.PetSearchCriteria;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.repository.OwnerRepository;
 import com.example.demo.repository.PetRepository;
 import com.example.demo.specification.PetSpecification;
 import com.example.demo.validator.EligibilityValidation;
-import com.github.ksuid.Ksuid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.example.demo.entities.Owner.buildOwnerFromInput;
+import static com.example.demo.entities.Pet.buildPetFromInput;
 
 @Slf4j
 @Component
 public class PetResolver {
 
-    public static final String PET_PREFIX = "pet-";
     private final PetRepository petRepository;
     private final OwnerRepository ownerRepository;
     private final List<EligibilityValidation> eligibilityValidations;
@@ -67,29 +66,23 @@ public class PetResolver {
                 .build();
     }
 
-    public Pet createPet(String name, Float weight, Boolean vaccinated, String breed, int trainingLevel, String ownerId) {
-        log.info("PetResolver#addPet - name={} weight={} vaccinated={} breed={} trainingLevel={} ownerId={}"
-                , name, weight, vaccinated, breed, trainingLevel, ownerId);
-        var owner = ownerRepository.findByPId(ownerId)
-                .orElseThrow(() -> NotFoundException.getException("pet", ownerId));
+    public Pet createPet(PetInput petInput) {
+        log.info("PetResolver#addPet - name={} weight={} vaccinated={} breed={} trainingLevel={} ownerId={}",
+                petInput.getName(),
+                petInput.getWeight(),
+                petInput.getVaccinated(),
+                petInput.getBreed(),
+                petInput.getTrainingLevel(),
+                petInput.getOwnerInput().getPId());
+
+        var owner = ownerRepository.findByPId(petInput.getOwnerInput().getPId())
+                .orElse(buildOwnerFromInput(petInput.getOwnerInput()));
 
         //how to validate not insert the same pet twice ?
 
-        var pet = Pet.builder()
-                .vaccinationStatus(vaccinated)
-                .birthdate(Date.from(Instant.now()))
-                .pId(getNewPId())
-                .name(name)
-                .weight(weight)
-                .breed(Breed.valueOf(breed))
-                .trainingLevel(trainingLevel)
-                .owner(owner)
-                .build();
+        var pet = buildPetFromInput(petInput, owner);
 
+        owner.getPets().add(pet);
         return petRepository.save(pet);
-    }
-
-    private String getNewPId() {
-        return PET_PREFIX + Ksuid.newKsuid();
     }
 }

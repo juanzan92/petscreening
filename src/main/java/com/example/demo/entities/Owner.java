@@ -1,5 +1,7 @@
 package com.example.demo.entities;
 
+import com.example.demo.entities.input.OwnerInput;
+import com.github.ksuid.Ksuid;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +14,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -21,6 +24,7 @@ import java.util.List;
 @Data
 @Table(name = "pet_owner", schema = "petscreening_schema")
 public class Owner {
+    public static final String OWNER_PREFIX = "ow";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
@@ -45,4 +49,17 @@ public class Owner {
     @Column(name = "phone")
     private String phone;
 
+    public static Owner buildOwnerFromInput(OwnerInput ownerInput) {
+        return Owner.builder()
+                .pets(new ArrayList<>())
+                .address(ownerInput.getAddress())
+                .pId(getNewPId())
+                .email(ownerInput.getEmail())
+                .phone(ownerInput.getPhone())
+                .build();
+    }
+
+    private static String getNewPId() {
+        return OWNER_PREFIX + Ksuid.newKsuid();
+    }
 }

@@ -3,7 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.entities.Owner;
 import com.example.demo.entities.Pet;
 import com.example.demo.entities.PetEligibility;
-import com.example.demo.entities.PetSearchCriteria;
+import com.example.demo.entities.input.PetInput;
+import com.example.demo.entities.input.PetSearchCriteria;
 import com.example.demo.repository.OwnerRepository;
 import com.example.demo.repository.PetRepository;
 import com.example.demo.resolver.PetResolver;
@@ -15,6 +16,7 @@ import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -41,14 +43,9 @@ public class PetController {
     }
 
     @MutationMapping
-    private Pet addPet(@Argument String name,
-                       @Argument Float weight,
-                       @Argument Boolean vaccinated,
-                       @Argument String breed,
-                       @Argument int trainingLevel,
-                       @Argument String ownerId) {
+    private Pet addPet(@Argument @Valid PetInput petInput) {
 
-        return petResolver.createPet(name, weight, vaccinated, breed, trainingLevel, ownerId);
+        return petResolver.createPet(petInput);
     }
 
     @SchemaMapping

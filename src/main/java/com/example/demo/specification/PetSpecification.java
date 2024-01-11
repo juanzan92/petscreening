@@ -1,7 +1,7 @@
 package com.example.demo.specification;
 
 import com.example.demo.entities.Pet;
-import com.example.demo.entities.PetSearchCriteria;
+import com.example.demo.entities.input.PetSearchCriteria;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 

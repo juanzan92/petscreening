@@ -5,7 +5,7 @@ type Query {
 }
 
 type Mutation {
-    addPet(name: String!, weight: Float!, vaccinated: Boolean!, breed: String!, trainingLevel: Int!, ownerId: String!): Pet
+    addPet(petInput: PetInput): Pet
 }
 
 type Pet {
@@ -49,6 +49,23 @@ input PetSearchCriteria {
     breed:Breed
     trainingLevel: Int
     vaccinationStatus: String
+}
+
+input PetInput {
+    name: String!
+    weight: Float!
+    vaccinated: Boolean!
+    breed: String!
+    trainingLevel: Int!
+    ownerInput: OwnerInput!
+}
+
+input OwnerInput {
+    pId: String
+    name: String
+    email: String
+    address: String
+    phone:String
 }
 
 scalar Date

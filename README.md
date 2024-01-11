@@ -1,17 +1,93 @@
+# Pet Screening challange
+
+Brief description of your Java GraphQL project.
+
+## Features
+
+-  petById(p_id: String): Pet 
+- searchPets(criteria: PetSearchCriteria): [Pet]
+- checkPetEligibility(petId: String!): PetEligibility
+- addPet
+- ...
+
+## Getting Started
+
+### Prerequisites
+
+- Docker
+- Docker compose
+- Java
+- GraphQL
+
+### Installation
+
+run "docker-compose up -d"
 
 
-Prerequisites:
+### Running the Application
 
-- Docker 
-- Docker Compose
+run main [PetscreeningApplication.java](src%2Fmain%2Fjava%2Fcom%2Fexample%2Fdemo%2FPetscreeningApplication.java)
+and  open
+http://localhost:8080/graphiql?path=/graphql
+## Usage
 
-run docker to build de DB
-  "docker-compose up -d"
+Sample GraphQL query:
 
-Run main [PetscreeningApplication.java](src%2Fmain%2Fjava%2Fcom%2Fexample%2Fdemo%2FPetscreeningApplication.java)
+```graphql
+query findPet {
+  petById(p_id: "pet-2akIHnzZrRtvzY485j5QPK1nBdt") {
+    id
+    name
+    breed
+    weight
+    trainingLevel
+    owner {
+      name
+      email
+      pId
+    }
+  }
+}
 
-Run the UI on http://localhost:8080/graphiql?path=/graphql
+query checkPetEligibility {
+  checkPetEligibility(petId: "pet-2agYPWx9iCrBlu4j8SNsyjkdvL8") {
+    petId
+    isValidPet
+  }
+}
 
+mutation createPet {
+  addPet(
+   petInput: {name: "MewStrong"
+    weight: 42
+    vaccinated: true
+    breed: "FRENCH_BULLDOG"
+    trainingLevel: 3
+    ownerInput: { pId: "ow-2agYX9U7AYX65ef0CuG9iquR6ff"}
+  }) {
+    name
+    pId
+    breed
+    trainingLevel
+    vaccinationStatus
+  }
+}
 
+query search {
+  searchPets(criteria: {weight: 15}) {
+    id
+    name
+    birthdate
+    weight
+    breed
+    owner {
+      id
+      name
+      email
+    }
+    trainingLevel
+    vaccinationStatus
+  }
+}
 
 

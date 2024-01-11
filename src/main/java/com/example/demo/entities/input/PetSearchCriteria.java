@@ -1,4 +1,4 @@
-package com.example.demo.entities;
+package com.example.demo.entities.input;
 
 import com.example.demo.entities.enums.Breed;
 import lombok.Builder;

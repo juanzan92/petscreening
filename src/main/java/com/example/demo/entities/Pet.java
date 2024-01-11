@@ -1,6 +1,8 @@
 package com.example.demo.entities;
 
 import com.example.demo.entities.enums.Breed;
+import com.example.demo.entities.input.PetInput;
+import com.github.ksuid.Ksuid;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,6 +19,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Builder
@@ -26,6 +29,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Pet {
+    public static final String PET_PREFIX = "pet-";
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
@@ -60,4 +65,22 @@ public class Pet {
     @ManyToOne(targetEntity = Owner.class)
     @JoinColumn(name = "pet_owner", nullable = false, referencedColumnName = "p_id")
     private Owner owner;
+
+
+    public static Pet buildPetFromInput(PetInput petInput, Owner owner) {
+        return Pet.builder()
+                .vaccinationStatus(petInput.getVaccinated())
+                .birthdate(Date.from(Instant.now()))
+                .pId(getNewPId())
+                .name(petInput.getName())
+                .weight(petInput.getWeight())
+                .breed(Breed.valueOf(petInput.getBreed()))
+                .trainingLevel(petInput.getTrainingLevel())
+                .owner(owner)
+                .build();
+    }
+
+    private static String getNewPId() {
+        return PET_PREFIX + Ksuid.newKsuid();
+    }
 }
