@@ -1,7 +1,6 @@
 # Pet Screening challange
 
-Brief description of your Java GraphQL project.
-
+Pet screening coding challange 
 ## Features
 
 -  petById(p_id: String): Pet 
