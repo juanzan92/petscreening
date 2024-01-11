@@ -62,7 +62,10 @@ mutation createPet {
     vaccinated: true
     breed: "FRENCH_BULLDOG"
     trainingLevel: 3
-    ownerInput: { pId: "ow-2agYX9U7AYX65ef0CuG9iquR6ff"}
+    ownerInput: {  name: "Juan"
+    email: "jm@hotmail.com"
+    address: "ibarblaz 1330 Cordoba"
+    phone: "+543513567182" }
   }) {
     name
     pId
